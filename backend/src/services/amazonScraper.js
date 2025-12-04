@@ -1,0 +1,130 @@
+const axios = require('axios');
+const cheerio = require('cheerio');
+const fs = require('fs').promises;
+const path = require('path');
+
+const CACHE_DIR = path.join(__dirname, 'cache');
+
+function normalizeUrl(url) {
+  if (!url) return '';
+  url = url.trim().split('?')[0];
+  if (url.startsWith('//')) url = 'https:' + url;
+  const m = url.match(/\.(jpe?g|png|webp|gif)(?:$|\/)/i);
+  return m ? url : '';
+}
+
+async function scrapeAmazonProduct(asin) {
+  const url = `https://www.amazon.in/dp/${asin}`;
+  const headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Referer": "https://www.google.com/",
+  };
+
+  let html;
+  let source = 'LIVE';
+
+  try {
+    await fs.mkdir(CACHE_DIR, { recursive: true });
+  } catch (e) {
+    // Directory exists, continue
+  }
+
+  try {
+    const response = await axios.get(url, { headers, timeout: 10000 });
+    html = response.data;
+  } catch (error) {
+    source = 'CACHE';
+    try {
+      const cachePath = path.join(CACHE_DIR, `${asin}.html`);
+      html = await fs.readFile(cachePath, 'utf8');
+    } catch (cacheError) {
+      throw new Error(`Failed to scrape ASIN ${asin}: ${error.message}`);
+    }
+  }
+
+  const $ = cheerio.load(html);
+
+  const title = $('#productTitle').text().trim();
+  
+  const bullets = [];
+  $('#feature-bullets .a-list-item').each((_, el) => {
+    const text = $(el).text().trim();
+    if (text) bullets.push(text);
+  });
+
+  const description = $('#productDescription').text().trim();
+
+  let imageUrl = '';
+
+  const metaImg = $('meta[property="og:image"]').attr('content') ||
+                  $('meta[name="twitter:image"]').attr('content') ||
+                  '';
+  if (metaImg) {
+    imageUrl = metaImg;
+  }
+
+  const selectorsToTry = [
+    { sel: '#imgTagWrapperId img', attrs: ['data-old-hires','data-a-dynamic-image','data-src','src','data-srcset','srcset'] },
+    { sel: '#landingImage', attrs: ['data-old-hires','data-a-dynamic-image','src','data-src'] },
+    { sel: '#imageBlock_feature_div img', attrs: ['data-old-hires','data-a-dynamic-image','data-src','src'] },
+    { sel: 'img[data-old-hires]', attrs: ['data-old-hires','src'] },
+    { sel: '.a-dynamic-image', attrs: ['data-a-dynamic-image','src','data-src'] },
+    { sel: 'img', attrs: ['data-src','src','srcset'] }
+  ];
+
+  for (const block of selectorsToTry) {
+    if (imageUrl) break;
+    const el = $(block.sel).first();
+    if (!el || !el.length) continue;
+
+    for (const attr of block.attrs) {
+      let val = el.attr(attr) || '';
+      if (!val && attr === 'srcset') {
+        val = el.attr('srcset') || '';
+        if (val) {
+          const parts = val.split(',').map(p => p.trim()).filter(Boolean);
+          if (parts.length) {
+            val = parts[parts.length - 1].split(' ')[0];
+          }
+        }
+      }
+
+      if (!val) continue;
+
+      if (attr === 'data-a-dynamic-image' || (val.startsWith('{') && val.includes('http'))) {
+        try {
+          let jsonText = val.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+          const parsed = JSON.parse(jsonText);
+          const urls = Object.keys(parsed || {});
+          if (urls.length) {
+            urls.sort((a,b) => b.length - a.length);
+            const candidate = normalizeUrl(urls[0]);
+            if (candidate) { imageUrl = candidate; break; }
+          }
+        } catch (e) {
+          // Continue to next attribute
+        }
+      }
+
+      const candidate = normalizeUrl(val);
+      if (candidate) { imageUrl = candidate; break; }
+    }
+  }
+
+  if (!imageUrl) {
+    const metaFallback = $('meta[property="og:image"]').attr('content') ||
+                         $('meta[name="twitter:image"]').attr('content') || '';
+    imageUrl = normalizeUrl(metaFallback);
+  }
+  
+  if (!title && bullets.length === 0 && !description) {
+    throw new Error(`Could not extract product details for ASIN ${asin} from ${source}`);
+  }
+
+  return { asin, title, bullets, description, imageUrl: imageUrl || null, source };
+}
+
+module.exports = { scrapeAmazonProduct };

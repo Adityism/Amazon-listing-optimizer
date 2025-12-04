@@ -1,0 +1,25 @@
+{
+  "name": "listing-optimizer-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "check-env": "node scripts/check-env.js",
+    "test-db": "node scripts/test-db.js",
+    "test-scraper": "node scripts/test-scraper.js",
+    "test-gemini-adapter": "node scripts/test-gemini-adapter.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.9.7",
+    "sequelize": "^6.35.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
