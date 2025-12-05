@@ -8,11 +8,13 @@
 	<img src="https://img.shields.io/badge/Gemini-2.5_Flash-purple" alt="Gemini" />
 </p>
 
+
 # Amazon Listing Optimizer
 
 A full-stack application that takes an Amazon ASIN, fetches the product details directly from the product page, and generates optimized listing content using Google Gemini. The app displays original and optimized content side-by-side and keeps a history of every optimization.
 
 This README explains what the project does, how it is structured, and how to run it locally.
+
 ---
 
 ## Screenshots
@@ -48,6 +50,7 @@ This README explains what the project does, how it is structured, and how to run
 
 ---
 
+
 ## Architecture Overview
 
 The system follows a simple client-server flow:
@@ -59,8 +62,25 @@ The system follows a simple client-server flow:
 6. UI shows a comparison and stores the state for reload.
 7. /api/history provides all past optimizations.
 
-npm install
-npm run dev
+---
+
+## System Diagram
+
+```mermaid
+flowchart LR
+	A[User/Browser] -->|ASIN| B(Frontend React UI)
+	B -->|API call| C(Backend Express API)
+	C -->|Scrape| D[Amazon Product Page]
+	C -->|AI Request| E[Gemini API]
+	C -->|DB Write/Read| F[(MySQL/JSON DB)]
+	C -->|Response| B
+	B -->|Show Results| A
+```
+
+---
+
+## Why This Project Matters
+This project demonstrates practical skills used in e-commerce automation: structured scraping, AI-based content generation, secure API design, data persistence, and clean UI workflows. It simulates a simplified version of internal tools used by Amazon sellers and retail optimization teams.
 
 ---
 
@@ -78,7 +98,7 @@ npm run dev
 	```sh
 	cp .env.example .env
 	```
-4. Fill in required fields
+4. Fill in required fields in `.env`:
 	```env
 	PORT=3000
 	GEMINI_API_KEY=your_key_here
@@ -89,46 +109,12 @@ npm run dev
 	DB_NAME=listing_optimizer
 	```
 	If MySQL credentials are valid, the backend will create tables automatically.
-
-#### Example: backend/.env
-```env
-PORT=3000
-GEMINI_API_KEY=your_key
-GEMINI_MODEL=gemini-2.5-flash
-DB_HOST=localhost
-DB_USER=root
-DB_PASS=your_pass
-DB_NAME=listing_optimizer
-```
----
-
-## Engineering Decisions
-
-- Used localStorage so users don’t lose results on reload.
-- Scraper has fallback selectors for Amazon layout changes.
-- AI output schema is always the same for the frontend.
-- There’s a JSON fallback DB mode if MySQL isn’t available.
-- Broke out scraper, AI client, and DB helpers into separate modules.
-
----
-
-## Limitations
-
-- Amazon changes their HTML often, so scraping can break.
-- If you scrape too fast, Amazon might block you.
-- Gemini’s output isn’t always consistent; prompt tweaks help but don’t fix everything.
-
----
 5. Start the backend
 	```sh
 	npm run dev
 	```
 	Backend will run at:
 	http://localhost:3000
-
-
-npm install
-npm run dev
 
 ---
 
@@ -149,9 +135,8 @@ npm run dev
 	Vite will show you a local development URL, usually:
 	http://localhost:5173
 
-
-
 ---
+
 
 ## How to Use the App
 
@@ -165,6 +150,7 @@ npm run dev
 
 
 ---
+
 
 ## API Summary
 
@@ -187,16 +173,28 @@ Returns optimization history for one ASIN.
 
 ---
 
-## Engineering Notes
 
-- The scraper includes fallback selectors to handle Amazon layout changes.
-- The AI client is written to fail gracefully and provide consistent output shape.
-- The database layer uses Sequelize models with explicit JSON parsing to keep structure predictable.
-- The frontend stores the most recent optimization in localStorage so the view persists after reload.
-- The UI avoids unnecessary re-renders and uses a clean component breakdown.
+---
 
+## Engineering Decisions
 
-<div align="center">
-	<b>Made by <span style="color:#6f42c1;">Aditya Goyal</span></b><br>
+- Used localStorage so users don’t lose results on reload.
+- Scraper has fallback selectors for Amazon layout changes.
+- AI output schema is always the same for the frontend.
+- There’s a JSON fallback DB mode if MySQL isn’t available.
+- Broke out scraper, AI client, and DB helpers into separate modules.
+
+---
+
+## Limitations
+
+- Amazon changes their HTML often, so scraping can break.
+- If you scrape too fast, Amazon might block you.
+- Gemini’s output isn’t always consistent; prompt tweaks help but don’t fix everything.
+
+---
+
+<p align="center">
+	<b>Made by Aditya Goyal</b><br>
 	<a href="mailto:adityism@gmail.com">Contact: adityism@gmail.com</a>
-</div>
+</p>
