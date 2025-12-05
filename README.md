@@ -201,8 +201,6 @@ Returns optimization history for one ASIN.
 
 ## Limitations
 
-- Amazon changes their HTML often, so scraping can break.
-- If you scrape too fast, Amazon might block you.
 - Gemini’s output isn’t always consistent; prompt tweaks help but don’t fix everything.
 
 ---
