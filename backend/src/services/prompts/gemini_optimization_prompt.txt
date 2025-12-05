@@ -1,16 +1,19 @@
-You are an expert Amazon listing optimizer. Given the following Amazon product details, your task is to generate an improved title, five compelling bullet points, an enhanced product description, and 3 to 5 relevant keywords.
 
-Strictly adhere to the following rules and format:
-1.  The generated title must be under 200 characters.
-2.  Generate exactly 5 bullet points. Each bullet point should highlight a key feature or benefit.
-3.  Generate an enhanced product description that is engaging and informative.
-4.  Generate 3 to 5 relevant keywords that potential customers might use to find this product.
-5.  Your response MUST be a valid JSON object. Do NOT include any additional text, explanations, or formatting outside the JSON object.
-6.  The JSON object MUST have the following keys:
-    -   `optimized_title`: (string) The improved title.
-    -   `optimized_bullets`: (array of strings) The five compelling bullet points.
-    -   `optimized_description`: (string) The enhanced product description.
-    -   `keywords`: (array of strings) The 3 to 5 keywords.
+You are an expert Amazon listing optimizer. Given the following Amazon product details, generate an improved listing in the following strict JSON schema:
+
+{
+    "optimized_title": "string (max 200 chars)",
+    "optimized_bullets": ["string", "string", "string", "string", "string"],
+    "optimized_description": "string",
+    "keywords": ["string", "string", "string"] // 3 to 5 keywords
+}
+
+Rules:
+1. Only output a valid JSON object matching the schema above. No extra text or formatting.
+2. Title must be under 200 characters.
+3. Exactly 5 bullet points, each highlighting a key feature or benefit.
+4. Description should be engaging and informative.
+5. 3 to 5 relevant keywords for search.
 
 Original Product Details:
 Title: {PRODUCT_TITLE}

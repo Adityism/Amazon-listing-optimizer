@@ -73,7 +73,6 @@ function Home() {
         <p className="hero-subtitle">
           Transform your Amazon product listings with AI-powered optimization for better visibility and sales.
         </p>
-        
         <div className="input-card">
           <div className="input-group">
             <input
@@ -97,7 +96,28 @@ function Home() {
         </div>
       </div>
 
-      {result && (
+      {loading && (
+        <div className="results-section">
+          <div className="results-container">
+            <div className="results-header">
+              <h2 className="results-title">Optimization Results</h2>
+              <button 
+                className="clear-result-button"
+                aria-label="Clear results"
+                disabled
+              >
+                Clear
+              </button>
+            </div>
+            <div className="product-image-wrapper skeleton shimmer" style={{height:180, width:180, margin:'0 auto'}}></div>
+            <div className="compare-view-wrapper">
+              <CompareView loading={true} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {result && !loading && (
         <div className="results-section">
           <div className="results-container">
             <div className="results-header">
@@ -110,7 +130,6 @@ function Home() {
                 Clear
               </button>
             </div>
-            
             {result.imageUrl && !imageError && (
               <div className="product-image-wrapper">
                 <div className="product-image-container">
@@ -124,7 +143,6 @@ function Home() {
                 </div>
               </div>
             )}
-            
             <div className="compare-view-wrapper">
               <CompareView 
                 original={result.original} 

@@ -25,6 +25,7 @@ async function scrapeAmazonProduct(asin) {
 
   let html;
   let source = 'LIVE';
+  const cachePath = path.join(CACHE_DIR, `${asin}.json`);
 
   try {
     await fs.mkdir(CACHE_DIR, { recursive: true });
@@ -32,17 +33,44 @@ async function scrapeAmazonProduct(asin) {
     // Directory exists, continue
   }
 
+  // Try to load cache first
+  let cacheData = null;
+  try {
+    const cacheRaw = await fs.readFile(cachePath, 'utf8');
+    cacheData = JSON.parse(cacheRaw);
+  } catch (e) {
+    // No cache, continue
+  }
+
+  // Helper to hash title+bullets
+  function getHash(title, bullets) {
+    const str = title + (bullets || []).join('|');
+    let hash = 0, i, chr;
+    for (i = 0; i < str.length; i++) {
+      chr = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0;
+    }
+    return hash;
+  }
+
+  // If cache exists and is fresh (<12h), use it
+  if (cacheData && cacheData.timestamp && (Date.now() - cacheData.timestamp < 12 * 60 * 60 * 1000)) {
+    source = 'CACHE';
+    return cacheData.data;
+  }
+
+  // Otherwise, scrape live
   try {
     const response = await axios.get(url, { headers, timeout: 10000 });
     html = response.data;
   } catch (error) {
-    source = 'CACHE';
-    try {
-      const cachePath = path.join(CACHE_DIR, `${asin}.html`);
-      html = await fs.readFile(cachePath, 'utf8');
-    } catch (cacheError) {
-      throw new Error(`Failed to scrape ASIN ${asin}: ${error.message}`);
+    // If live scrape fails, fallback to cache if available
+    if (cacheData && cacheData.data) {
+      source = 'CACHE';
+      return cacheData.data;
     }
+    throw new Error(`Failed to scrape ASIN ${asin}: ${error.message}`);
   }
 
   const $ = cheerio.load(html);
@@ -124,7 +152,21 @@ async function scrapeAmazonProduct(asin) {
     throw new Error(`Could not extract product details for ASIN ${asin} from ${source}`);
   }
 
-  return { asin, title, bullets, description, imageUrl: imageUrl || null, source };
+  const result = { asin, title, bullets, description, imageUrl: imageUrl || null, source };
+
+  // Save cache with timestamp and hash
+  const cacheToSave = {
+    timestamp: Date.now(),
+    hash: getHash(title, bullets),
+    data: result
+  };
+  try {
+    await fs.writeFile(cachePath, JSON.stringify(cacheToSave), 'utf8');
+  } catch (e) {
+    // Ignore cache write errors
+  }
+
+  return result;
 }
 
 module.exports = { scrapeAmazonProduct };

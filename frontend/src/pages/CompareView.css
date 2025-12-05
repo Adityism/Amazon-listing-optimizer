@@ -1,3 +1,28 @@
+/* Skeleton Loader Styles */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+  border-radius: 8px;
+  min-height: 18px;
+  position: relative;
+  overflow: hidden;
+  animation: skeleton-blink 1.2s cubic-bezier(0.4,0.0,0.2,1) infinite;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer-move 1.5s linear infinite, skeleton-blink 1.2s cubic-bezier(0.4,0.0,0.2,1) infinite;
+}
+
+@keyframes shimmer-move {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes skeleton-blink {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
 /* Compare View */
 .compare-view-container {
   display: grid;

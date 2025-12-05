@@ -1,7 +1,57 @@
 import React from 'react';
 import './CompareView.css';
 
-function CompareView({ original, optimized }) {
+function SkeletonText({ width = '80%', height = 18 }) {
+  return <div className="skeleton shimmer" style={{ width, height, marginBottom: 8 }}></div>;
+}
+
+function CompareView({ original, optimized, loading }) {
+  if (loading) {
+    return (
+      <div className="compare-view-container">
+        <div className="compare-card">
+          <h3 className="compare-card-title original">Original</h3>
+          <div className="compare-item-group">
+            <span className="compare-item-label">Title</span>
+            <SkeletonText width="90%" />
+          </div>
+          <div className="compare-item-group">
+            <span className="compare-item-label">Bullet Points</span>
+            <ul className="compare-bullets">
+              {[...Array(5)].map((_, i) => <li key={i}><SkeletonText width="95%" /></li>)}
+            </ul>
+          </div>
+          <div className="compare-item-group">
+            <span className="compare-item-label">Description</span>
+            <SkeletonText width="98%" height={32} />
+          </div>
+        </div>
+        <div className="compare-card optimized">
+          <h3 className="compare-card-title optimized">Optimized</h3>
+          <div className="compare-item-group">
+            <span className="compare-item-label">Title</span>
+            <SkeletonText width="90%" />
+          </div>
+          <div className="compare-item-group">
+            <span className="compare-item-label">Bullet Points</span>
+            <ul className="compare-bullets">
+              {[...Array(5)].map((_, i) => <li key={i}><SkeletonText width="95%" /></li>)}
+            </ul>
+          </div>
+          <div className="compare-item-group">
+            <span className="compare-item-label">Description</span>
+            <SkeletonText width="98%" height={32} />
+          </div>
+          <div className="compare-keywords">
+            <span className="compare-item-label">Keywords</span>
+            <div className="compare-item-value">
+              {[...Array(4)].map((_, i) => <SkeletonText key={i} width="60px" height={18} />)}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="compare-view-container">
       <div className="compare-card">
