@@ -9,6 +9,10 @@
 </p>
 
 # Amazon Listing Optimizer
+
+A full-stack application that takes an Amazon ASIN, fetches the product details directly from the product page, and generates optimized listing content using Google Gemini. The app displays original and optimized content side-by-side and keeps a history of every optimization.
+
+This README explains what the project does, how it is structured, and how to run it locally.
 ---
 
 ## Screenshots
@@ -18,12 +22,6 @@
 	<img src="frontend/SS/HOME2.png" alt="CompareView" width="350" />
 	<img src="frontend/SS/HISTORY.png" alt="History Page" width="350" />
 </p>
-
----
-
-A full-stack application that takes an Amazon ASIN, fetches the product details directly from the product page, and generates optimized listing content using Google Gemini. The app displays original and optimized content side-by-side and keeps a history of every optimization.
-
-This README explains what the project does, how it is structured, and how to run it locally.
 
 ---
 
