@@ -40,7 +40,7 @@ This README explains what the project does, how it is structured, and how to run
 
 ---
 
-## 🗄️ Database & Fallback System
+## Database & Fallback System
 
 - **Primary Database:** MySQL is used by default, with Sequelize automatically creating the `optimizations` table on startup when valid credentials are present.
 - **Full History:** Every listing’s original and optimized data is stored with timestamps, enabling complete history and side-by-side comparisons for each ASIN.
