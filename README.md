@@ -1,5 +1,25 @@
 
+
+<!-- Badges -->
+<p align="center">
+	<img src="https://img.shields.io/badge/Node.js-18%2B-green" alt="Node.js" />
+	<img src="https://img.shields.io/badge/React-18-blue" alt="React" />
+	<img src="https://img.shields.io/badge/MySQL-8-orange" alt="MySQL" />
+	<img src="https://img.shields.io/badge/Gemini-2.5_Flash-purple" alt="Gemini" />
+</p>
+
 # Amazon Listing Optimizer
+---
+
+## Screenshots
+
+<p align="center">
+	<img src="frontend/SS/HOME1.png" alt="Home Input" width="350" />
+	<img src="frontend/SS/HOME2.png" alt="CompareView" width="350" />
+	<img src="frontend/SS/HISTORY.png" alt="History Page" width="350" />
+</p>
+
+---
 
 A full-stack application that takes an Amazon ASIN, fetches the product details directly from the product page, and generates optimized listing content using Google Gemini. The app displays original and optimized content side-by-side and keeps a history of every optimization.
 
@@ -71,6 +91,36 @@ npm run dev
 	DB_NAME=listing_optimizer
 	```
 	If MySQL credentials are valid, the backend will create tables automatically.
+
+#### Example: backend/.env
+```env
+PORT=3000
+GEMINI_API_KEY=your_key
+GEMINI_MODEL=gemini-2.5-flash
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=your_pass
+DB_NAME=listing_optimizer
+```
+---
+
+## Engineering Decisions
+
+- Used localStorage so users don’t lose results on reload.
+- Scraper has fallback selectors for Amazon layout changes.
+- AI output schema is always the same for the frontend.
+- There’s a JSON fallback DB mode if MySQL isn’t available.
+- Broke out scraper, AI client, and DB helpers into separate modules.
+
+---
+
+## Limitations
+
+- Amazon changes their HTML often, so scraping can break.
+- If you scrape too fast, Amazon might block you.
+- Gemini’s output isn’t always consistent; prompt tweaks help but don’t fix everything.
+
+---
 5. Start the backend
 	```sh
 	npm run dev
