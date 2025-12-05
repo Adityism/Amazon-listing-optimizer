@@ -28,6 +28,7 @@ This README explains what the project does, how it is structured, and how to run
 ---
 
 
+
 ## Features
 
 - Fetches Amazon product data using a custom scraper (title, bullet points, description, image).
@@ -36,6 +37,15 @@ This README explains what the project does, how it is structured, and how to run
 - Clean React frontend for entering ASINs, comparing results, and viewing history.
 - Modern, minimal UI.
 - **Ultra-low latency:** Parallelized scraping and AI generation, aggressive HTML caching, background DB writes, strict Gemini response schema, and professional skeleton loaders for instant feedback.
+
+---
+
+## 🗄️ Database & Fallback System
+
+- **Primary Database:** MySQL is used by default, with Sequelize automatically creating the `optimizations` table on startup when valid credentials are present.
+- **Full History:** Every listing’s original and optimized data is stored with timestamps, enabling complete history and side-by-side comparisons for each ASIN.
+- **Instant Fallback:** If MySQL isn’t configured, the backend switches to a local JSON file (`backend/src/db/db.json`) with the same structure—no setup required.
+- **Unified API Shape:** Both database modes share the same API and data format, keeping the frontend consistent and allowing the app to run instantly on any machine.
 
 
 
@@ -174,8 +184,6 @@ Returns all stored optimizations.
 
 Returns optimization history for one ASIN.
 
-
----
 
 
 ---
