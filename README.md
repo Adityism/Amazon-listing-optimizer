@@ -148,6 +148,7 @@ Returns optimization history for one ASIN.
 - The UI avoids unnecessary re-renders and uses a clean component breakdown.
 
 
----
+<div align="center">
 	<b>Made by <span style="color:#6f42c1;">Aditya Goyal</span></b><br>
 	<a href="mailto:adityism@gmail.com">Contact: adityism@gmail.com</a>
+</div>
