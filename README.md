@@ -1,10 +1,3 @@
-<div align="center">
-	<br>
-	<img src="https://img.shields.io/badge/Amazon%20Listing%20Optimizer-AI%20Powered-blueviolet?style=for-the-badge&logo=amazon" alt="Amazon Listing Optimizer" />
-	<br><br>
-	<b>Made by <span style="color:#6f42c1;">Aditya Goyal</span></b><br>
-	<a href="mailto:adityism@gmail.com">Contact: adityism@gmail.com</a>
-</div>
 
 # Amazon Listing Optimizer
 
@@ -156,68 +149,5 @@ Returns optimization history for one ASIN.
 
 
 ---
-
-## Folder Structure
-
-```
-Listing Optimizer
-├── backend
-│   ├── index.js
-│   ├── package.json
-│   ├── config/
-│   │   └── index.js
-│   ├── middleware/
-│   │   ├── errorHandler.js
-│   │   └── logger.js
-│   ├── scripts/
-│   │   ├── check-env.js
-│   │   ├── test-db.js
-│   │   ├── test-gemini-adapter.js
-│   │   └── test-scraper.js
-│   ├── src/
-│   │   ├── controllers/
-│   │   │   └── optimizationController.js
-│   │   ├── db/
-│   │   │   ├── db.json
-│   │   │   ├── init.js
-│   │   │   ├── Optimization.js
-│   │   │   ├── optimizationHelpers.js
-│   │   │   └── sequelize.js
-│   │   ├── routes/
-│   │   │   └── optimizationRoutes.js
-│   │   ├── services/
-│   │   │   ├── aiClient.js
-│   │   │   ├── amazonScraper.js
-│   │   │   ├── cache/
-│   │   │   │   ├── B002QYW8C4.html
-│   │   │   │   └── B0FWDBH2T2.html
-│   │   │   └── prompts/
-│   │   │       └── gemini_optimization_prompt.txt
-│   │   └── utils/
-│   │       └── initDb.js
-├── frontend
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── public/
-│   │   └── vite.svg
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── index.css
-│   │   ├── main.jsx
-│   │   ├── assets/
-│   │   ├── pages/
-│   │   │   ├── CompareView.css
-│   │   │   ├── CompareView.jsx
-│   │   │   ├── History.css
-│   │   │   ├── History.jsx
-│   │   │   └── Home.jsx
-│   │   ├── styles/
-│   │   │   └── app.css
-│   │   └── utils/
-│   │       └── api.js
-│   └── README.md
-├── CLEANUP_SUMMARY.md
-├── process.md
-└── README.md
-```
+	<b>Made by <span style="color:#6f42c1;">Aditya Goyal</span></b><br>
+	<a href="mailto:adityism@gmail.com">Contact: adityism@gmail.com</a>
