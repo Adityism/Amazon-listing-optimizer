@@ -162,18 +162,62 @@ Returns optimization history for one ASIN.
 ```
 Listing Optimizer
 ├── backend
-│   ├── src
-│   │   ├── controllers
-│   │   ├── services
-│   │   ├── routes
-│   │   ├── db
-│   │   └── config
-│   ├── .env.example
-│   └── index.js
-└── frontend
-	├── src
-	│   ├── pages
-	│   ├── components
-	│   └── utils
-	└── vite.config.js
+│   ├── index.js
+│   ├── package.json
+│   ├── config/
+│   │   └── index.js
+│   ├── middleware/
+│   │   ├── errorHandler.js
+│   │   └── logger.js
+│   ├── scripts/
+│   │   ├── check-env.js
+│   │   ├── test-db.js
+│   │   ├── test-gemini-adapter.js
+│   │   └── test-scraper.js
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   └── optimizationController.js
+│   │   ├── db/
+│   │   │   ├── db.json
+│   │   │   ├── init.js
+│   │   │   ├── Optimization.js
+│   │   │   ├── optimizationHelpers.js
+│   │   │   └── sequelize.js
+│   │   ├── routes/
+│   │   │   └── optimizationRoutes.js
+│   │   ├── services/
+│   │   │   ├── aiClient.js
+│   │   │   ├── amazonScraper.js
+│   │   │   ├── cache/
+│   │   │   │   ├── B002QYW8C4.html
+│   │   │   │   └── B0FWDBH2T2.html
+│   │   │   └── prompts/
+│   │   │       └── gemini_optimization_prompt.txt
+│   │   └── utils/
+│   │       └── initDb.js
+├── frontend
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── public/
+│   │   └── vite.svg
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── assets/
+│   │   ├── pages/
+│   │   │   ├── CompareView.css
+│   │   │   ├── CompareView.jsx
+│   │   │   ├── History.css
+│   │   │   ├── History.jsx
+│   │   │   └── Home.jsx
+│   │   ├── styles/
+│   │   │   └── app.css
+│   │   └── utils/
+│   │       └── api.js
+│   └── README.md
+├── CLEANUP_SUMMARY.md
+├── process.md
+└── README.md
 ```
