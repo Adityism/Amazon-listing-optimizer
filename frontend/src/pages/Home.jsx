@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CompareView from './CompareView';
 import api from '../utils/api';
+
+const STORAGE_KEY = 'lastOptimizationResult';
 
 function Home() {
   const [asin, setAsin] = useState('');
@@ -9,18 +11,39 @@ function Home() {
   const [error, setError] = useState('');
   const [imageError, setImageError] = useState(false);
 
+  useEffect(() => {
+    const savedResult = localStorage.getItem(STORAGE_KEY);
+    if (savedResult) {
+      try {
+        const parsedResult = JSON.parse(savedResult);
+        setResult(parsedResult);
+        if (parsedResult.asin) {
+          setAsin(parsedResult.asin);
+        }
+      } catch (e) {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  }, []);
+
   const handleOptimize = async () => {
     setError('');
     setResult(null);
+    localStorage.removeItem(STORAGE_KEY);
+    
     if (!asin.trim()) {
       setError('Please enter an ASIN.');
       return;
     }
+    
     setLoading(true);
     try {
       const data = await api.optimizeListing(asin.trim());
       setResult(data);
       setImageError(false);
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      
       setTimeout(() => {
         const resultsSection = document.querySelector('.results-section');
         if (resultsSection) {
@@ -34,6 +57,13 @@ function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleClearResult = () => {
+    setResult(null);
+    setAsin('');
+    setImageError(false);
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   return (
@@ -70,6 +100,17 @@ function Home() {
       {result && (
         <div className="results-section">
           <div className="results-container">
+            <div className="results-header">
+              <h2 className="results-title">Optimization Results</h2>
+              <button 
+                onClick={handleClearResult}
+                className="clear-result-button"
+                aria-label="Clear results"
+              >
+                Clear
+              </button>
+            </div>
+            
             {result.imageUrl && !imageError && (
               <div className="product-image-wrapper">
                 <div className="product-image-container">
