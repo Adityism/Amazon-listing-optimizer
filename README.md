@@ -27,6 +27,7 @@ This README explains what the project does, how it is structured, and how to run
 
 ---
 
+
 ## Features
 
 - Fetches Amazon product data using a custom scraper (title, bullet points, description, image).
@@ -34,6 +35,9 @@ This README explains what the project does, how it is structured, and how to run
 - Stores every optimization in a MySQL database.
 - Clean React frontend for entering ASINs, comparing results, and viewing history.
 - Modern, minimal UI.
+- **Ultra-low latency:** Parallelized scraping and AI generation, aggressive HTML caching, background DB writes, strict Gemini response schema, and professional skeleton loaders for instant feedback.
+
+
 
 ---
 
@@ -178,11 +182,12 @@ Returns optimization history for one ASIN.
 
 ## Engineering Decisions
 
-- Used localStorage so users don’t lose results on reload.
-- Scraper has fallback selectors for Amazon layout changes.
-- AI output schema is always the same for the frontend.
-- There’s a JSON fallback DB mode if MySQL isn’t available.
-- Broke out scraper, AI client, and DB helpers into separate modules.
+ - Used localStorage so users don’t lose results on reload.
+ - Scraper has fallback selectors for Amazon layout changes.
+ - AI output schema is always the same for the frontend.
+ - There’s a JSON fallback DB mode if MySQL isn’t available.
+ - Broke out scraper, AI client, and DB helpers into separate modules.
+ - Latency optimized: scraping and AI run in parallel, HTML is aggressively cached, DB writes are backgrounded, and the frontend uses animated skeleton loaders for instant feedback.
 
 ---
 
